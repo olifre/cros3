@@ -1,0 +1,2 @@
+KERNEL=="cros3", ACTION=="add",  RUN="/bin/sh -c '/bin/mknod /dev/cros3-%m c 61 0 && chgrp users /dev/cros3-0 && chmod 0660 /dev/cros3-0'"
+fgKERNEL=="cros3", ACTION=="remove", RUN="/bin/rm /dev/cros3-0"
