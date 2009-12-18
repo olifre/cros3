@@ -41,6 +41,20 @@ struct cros3_csb_csr_cfg_regbits {
     unsigned dven:1;
 };
 
+struct cros3_csb_csr_sts_regbits {
+    unsigned rwc:10;
+    unsigned spare1:5;
+    unsigned ints:1;
+    unsigned dec:8;
+    unsigned rfef:1;
+    unsigned spare2:1;
+    unsigned rfaf:1;
+    unsigned rfff:1;
+    unsigned strg:1;
+    unsigned svet:1;
+    unsigned sbsy:1;
+    unsigned ibsy:1;
+};
 
 union cros3_csb_csr_fid_reg { /* (0x20) CSB Firmware Identifier	     */
     unsigned int data;
@@ -56,7 +70,7 @@ union cros3_csb_act_cmd_reg { /* (0x28) CROS-3 Command		     */
 };
 union cros3_csb_csr_sts_reg { /* (0x2C) CSB Receive FIFO Status	*/
     unsigned int data;
-/*    struct cros3_csb_csr_sts_regbits bits; */
+    struct cros3_csb_csr_sts_regbits bits;
 };
 struct cros3_register_image_v071125 {
     int CSB_ACT_RES; /* (0x00) CSB Reset                      */
