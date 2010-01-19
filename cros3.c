@@ -161,13 +161,13 @@ cros3_read(struct file *file, char *buf, size_t count, loff_t *ppos)
 						 bytes_to_copy);
     device->read_index = end;
     
-    if (missing>0) {
+/*    if (missing>0) {
       bytes_to_copy = sizeof(device->irqdata[0])*missing;
       copied_bytes += bytes_to_copy - copy_to_user(buf+ copied_bytes,
 						   ((char *)&(device->irqdata[0])),
 						   bytes_to_copy);
       device->read_index = missing;
-    }
+    }*/
     *ppos += copied_bytes;
     return copied_bytes;
 }
