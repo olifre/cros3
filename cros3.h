@@ -92,8 +92,29 @@ struct cros3_register_image_v071125 {
     unsigned int CSB_CSR_RCT[(0x7ffc - 0x0040)/4+1]; /*0x0040 - 0x7FFC CSB Receipt / Readout Data */
 };
 
+struct cros3_register_image_v100115 {
+	int CSB_ACT_RES; /* (0x00) CSB Reset                      */
+	int CSB_ACT_CLR; /* (0x04) CSB Receive FIFO Reset	     */
+	int CSB_ACT_DCR; /* (0x08) CSB Data Error Counter Reset   */
+	int CSB_ACT_PCR; /* (0x0C) CSB PRBS Error Counter Reset   */
+	int CSB_ACT_INS; /* (0x10) CSB Interrupt Set		     */
+	int CSB_ACT_INR; /* (0x14) CSB Interrupt Reset	     */
+	int CSB_ACT_INI; /* (0x18) CSB Fiber Link Initialize */
+	int filler2; /* (0x1C) */
+	union cros3_csb_csr_fid_reg CSB_CSR_FID; /* (0x20) CSB Firmware Identifier	     */
+	union cros3_csb_csr_cfg_reg CSB_CSR_CFG; /* (0x24) CSB Configuration / Status     */
+	union cros3_csb_act_cmd_reg CSB_ACT_CMD; /* (0x28) CROS-3 Command		     */
+	union cros3_csb_csr_sts_reg CSB_CSR_STS; /* (0x2C) CSB Receive FIFO Status	     */
+	int filler3; /* 0x30) */
+	int filler4; /* 0x34) */
+	int filler5; /* 0x38) */
+	int CSB_DAT_RW;  /* (0x3C) CSB Read/Write Register        */
+	unsigned int CSB_CSR_RCT[(0x7ffc - 0x0040)/4+1]; /*0x0040 - 0x7FFC CSB Receipt / Readout Data */
+};
+
 union cros3_register_image {
     struct cros3_register_image_v071125 v071125;
+	struct cros3_register_image_v100115 v100115;
 };
 
 
