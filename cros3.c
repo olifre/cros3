@@ -2,7 +2,6 @@
 $Id: cros3.c,v 1.21 2008/05/24 03:30:03 hannappe Exp $
 Linux driver for CROS3 chamber readout PCI board.
  */
-#include <linux/autoconf.h>
 #include <linux/module.h>
 
 #include <linux/kernel.h>
@@ -45,8 +44,8 @@ Linux driver for CROS3 chamber readout PCI board.
 #define PCI_VENDOR_ID_PNPI 0x1999
 #define PCI_DEVICE_ID_CROS3 0x680C
 
-#define CROS3_MAJOR (61)
-#define CROS3_MAXDEV (4)
+#define CROS3_MAJOR 61
+#define CROS3_MAXDEV 4
 
 struct cros3_device {
   struct pci_dev *pcidev;
