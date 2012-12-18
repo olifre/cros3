@@ -17,6 +17,7 @@ Linux driver for CROS3 chamber readout PCI board.
 #include <linux/pci.h>
 #include <linux/interrupt.h>
 #include <linux/wait.h>
+#include <linux/sched.h>
 
 #include <linux/version.h>
 #ifndef KERNEL_VERSION
@@ -28,7 +29,9 @@ Linux driver for CROS3 chamber readout PCI board.
 #include <asm/io.h>
 #include <asm/bitops.h>
 #include <asm/segment.h>
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,37))
 #include <asm/system.h>
+#endif
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28))
   #include <linux/semaphore.h>
