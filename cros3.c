@@ -18,6 +18,8 @@ Linux driver for CROS3 chamber readout PCI board.
 #include <linux/interrupt.h>
 #include <linux/wait.h>
 #include <linux/sched.h>
+#include <linux/device.h>
+#include <linux/cdev.h>
 
 #include <linux/version.h>
 #ifndef KERNEL_VERSION
@@ -47,7 +49,6 @@ Linux driver for CROS3 chamber readout PCI board.
 #define PCI_VENDOR_ID_PNPI 0x1999
 #define PCI_DEVICE_ID_CROS3 0x680C
 
-#define CROS3_MAJOR 61
 #define CROS3_MAXDEV 4
 
 struct cros3_device {
@@ -61,13 +62,15 @@ struct cros3_device {
   unsigned int write_index;
   unsigned int read_index;
   unsigned long base_addr;            /* base address of memory image */
+  struct cdev cdev;
   char *registers; 			/* register image of board */
 };
 
 
 static struct cros3_device device[CROS3_MAXDEV] = {{0}};
 static int nof_devices = 0;
-
+static struct class *cros3_class = NULL;
+static int cros3_major = 0;
 
 static int
 cros3_open(struct inode *inode, struct file *file)
@@ -279,79 +282,110 @@ cros3_check_board(struct cros3_device *device)
 
 static int __init cros3_init_module (void)
 {
-    printk(KERN_INFO "cros3: driver startup, compiled " __DATE__ " " __TIME__ "\n");
-    printk(KERN_INFO "cros3: $Id: cros3.c,v 1.21 2008/05/24 03:30:03 hannappe Exp $\n");
-    printk(KERN_INFO "cros3: " CROS3_HEADER_ID "\n");
-    if (register_chrdev (CROS3_MAJOR, "cros3", &cros3_fops)) {
-	printk (KERN_ERR "cros3: unable to get major %d\n", CROS3_MAJOR);
-	return -EIO;
-    }
+	dev_t devreg = 0;
+	printk(KERN_INFO "cros3: driver startup, compiled " __DATE__ " " __TIME__ "\n");
+	printk(KERN_INFO "cros3: $Id: cros3.c,v 1.21 2008/05/24 03:30:03 hannappe Exp $\n");
+	printk(KERN_INFO "cros3: " CROS3_HEADER_ID "\n");
 
+	if (alloc_chrdev_region(&devreg, 0, CROS3_MAXDEV, "cros3") < 0) {
+		printk (KERN_ERR "cros3: unable to allocate character device region\n");
+		return -EIO;
+	}
+	cros3_major = MAJOR(devreg);
+
+	cros3_class = class_create(THIS_MODULE, "cros3");
+	if (IS_ERR(cros3_class)) {
+		printk (KERN_ERR "cros3: unable to create device class\n");
+		return -EIO;
+	}
 
     {
-	struct pci_dev *pdev = NULL;
-	nof_devices=0;
-	while ((pdev = pci_get_device (PCI_VENDOR_ID_PNPI, 
-					PCI_DEVICE_ID_CROS3, 
-					pdev))) {
-	    unsigned char pci_bus;
-	    unsigned char pci_device_fn;
-	    unsigned int pci_ioaddr;
-	    
-	    pci_bus = pdev->bus->number;
-	    pci_device_fn = pdev->devfn;
-	    pci_ioaddr = pci_resource_start (pdev,0);
-	    printk(KERN_INFO "cros3: found at bus %x device %x\n",
-		   pci_bus, pci_device_fn);
-	    
-	    if (nof_devices+1 > CROS3_MAXDEV) {
-		printk(KERN_WARNING "cros3: found %d devices, but driver is confugured for only %d, ignoring this one\n",
-		       nof_devices+1, CROS3_MAXDEV);
-	    } else {
-		if (pci_enable_device(pdev))
-		    continue;
-		device[nof_devices].pcidev = pdev;
-		device[nof_devices].in_use = 0;
-		device[nof_devices].base_addr = pci_resource_start (pdev,0);
-		device[nof_devices].irq = pdev->irq;
-		atomic_set(&(device[nof_devices].irqs_since_read),0);
-		device[nof_devices].total_irqs = 0;
-		device[nof_devices].write_index = 0;
-		device[nof_devices].read_index = 0;
-		request_irq(device[nof_devices].irq,cros3_interrupt,IRQF_SHARED,
-			    "cros3", &device[nof_devices]);
-		device[nof_devices].registers = ioremap(device[nof_devices].base_addr,0x10000);
-		init_waitqueue_head(&(device[nof_devices].irqwait));
+		struct pci_dev *pdev = NULL;
+		nof_devices=0;
+		while ((pdev = pci_get_device (PCI_VENDOR_ID_PNPI, 
+						PCI_DEVICE_ID_CROS3, 
+						pdev))) {
+			unsigned char pci_bus;
+			unsigned char pci_device_fn;
+			unsigned int pci_ioaddr;
+			int err = 0;
+			struct device *dev = NULL;
+			dev_t devno = MKDEV(cros3_major, nof_devices);
 
-		cros3_check_board(&device[nof_devices]);
+			cdev_init(&device[nof_devices].cdev, &cros3_fops);
+			err = cdev_add(&device[nof_devices].cdev, devno, 1);
+			if (err) {
+				printk(KERN_WARNING "cros3: Error %d while trying to add %s_%d",
+					err, "cros3", nof_devices);
+				continue;
+			}
 
-	    }
-	    nof_devices++;
+			dev = device_create(cros3_class, NULL, /* no parent device */ 
+				devno, NULL, /* no additional data */
+				"cros3-%d", nof_devices);
+			if (IS_ERR(dev)) {
+				err = PTR_ERR(dev);
+				printk(KERN_WARNING "cros3: Error %d while trying to create %s-%d",
+					err, "cros3", nof_devices);
+				cdev_del(&device[nof_devices].cdev);
+				continue;
+			}
+
+			pci_bus = pdev->bus->number;
+			pci_device_fn = pdev->devfn;
+			pci_ioaddr = pci_resource_start (pdev,0);
+			printk(KERN_INFO "cros3: found at bus %x device %x\n",
+			pci_bus, pci_device_fn);
+			
+			if (nof_devices+1 > CROS3_MAXDEV) {
+				printk(KERN_WARNING "cros3: found %d devices, but driver is confugured for only %d, ignoring this one\n",
+					nof_devices+1, CROS3_MAXDEV);
+			} else {
+				if (pci_enable_device(pdev))
+					continue;
+				device[nof_devices].pcidev = pdev;
+				device[nof_devices].in_use = 0;
+				device[nof_devices].base_addr = pci_resource_start (pdev,0);
+				device[nof_devices].irq = pdev->irq;
+				atomic_set(&(device[nof_devices].irqs_since_read),0);
+				device[nof_devices].total_irqs = 0;
+				device[nof_devices].write_index = 0;
+				device[nof_devices].read_index = 0;
+				request_irq(device[nof_devices].irq,cros3_interrupt,IRQF_SHARED,
+						"cros3", &device[nof_devices]);
+				device[nof_devices].registers = ioremap(device[nof_devices].base_addr,0x10000);
+				init_waitqueue_head(&(device[nof_devices].irqwait));
+
+				cros3_check_board(&device[nof_devices]);
+			}
+			nof_devices++;
+		}
+		printk(KERN_INFO "cros3: found %d devices\n", nof_devices);
+		if (nof_devices == 0)
+		{
+			printk(KERN_ERR "cros3: No Cros3 chip found. giving up.\n");
+			unregister_chrdev_region(MKDEV(cros3_major, 0), CROS3_MAXDEV);
+			return -ENOSYS;
+		}
 	}
-	printk(KERN_INFO "cros3: found %d devices\n", nof_devices);
-	if (nof_devices == 0)
-	{
-	    printk(KERN_ERR "cros3: No Cros3 chip found. giving up.\n");
-	    unregister_chrdev(CROS3_MAJOR,"cros3");
-	    return -ENOSYS;
-	}
-	
-    }
-    return 0;
+	return 0;
 }
 static void cros3_cleanup_module (void)
 {
-    int n;
-    for (n=0; n<CROS3_MAXDEV; n++) {
-	if (device[n].pcidev) { /* this device is found and configured */
-	    iounmap(device[n].registers);
-	    free_irq(device[n].irq,&device[n]);
+	int n;
+	for (n=0; n<CROS3_MAXDEV; n++) {
+		if (device[n].pcidev) { /* this device is found and configured */
+			iounmap(device[n].registers);
+			free_irq(device[n].irq,&device[n]);
+			cdev_del(&device[nof_devices].cdev);
+		}
 	}
-    }
-    unregister_chrdev(CROS3_MAJOR, "cros3");
+	if (cros3_class) {
+		class_destroy(cros3_class);
+	}
+	unregister_chrdev_region(MKDEV(cros3_major, 0), CROS3_MAXDEV);
 }
 
 module_init(cros3_init_module);
 module_exit(cros3_cleanup_module);
-MODULE_ALIAS_CHARDEV_MAJOR(CROS3_MAJOR);
 MODULE_LICENSE("GPL");
