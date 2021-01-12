@@ -34,3 +34,9 @@ jobs:
           entrypoint: /bin/bash
           args: source_dir/.scripts/buildpkg.sh
 
+      - name: Upload Package
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ runner.os }}-DEB
+          path: *.deb
+          retention-days: 2
