@@ -31,6 +31,6 @@ jobs:
       - name: Build Package
         uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/gbp:latest
         with:
-          entrypoint: /bin/sh
+          entrypoint: /bin/bash
           args: source_dir/.scripts/buildpkg.sh
 
