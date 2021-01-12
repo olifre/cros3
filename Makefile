@@ -9,18 +9,9 @@ cros3-hdrs 	+= cros3.h
 EXTRA_CFLAGS    += \
                 -I$(PWD) \
 
-ifeq ($(KERNELRELEASE),)
-# on first call from remote location we get into this path
-# whilst on second call all is managed by the embedding kernel makefile
+KVER ?= $(shell uname -r)
+KDIR ?= /lib/modules/$(KVER)/build
 
-KVER            = $(shell uname -r)
-# KVER            = 2.6.0-0.test1.1.26custom
-
-ifeq (1,1)
-KDIR            = /lib/modules/$(KVER)/build
-else
-KDIR            = /usr/src/linux-$(KVER)
-endif
 PWD             = $(shell pwd)
 
 cros3-cfiles    = ${cros3-c-objs:.o=.c}
