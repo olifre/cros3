@@ -1,0 +1,22 @@
+Source: cros3
+Section: kernel
+Priority: optional
+Maintainer: Oliver Freyermuth <freyermuth@physik.uni-bonn.de>
+Build-Depends: debhelper-compat (= 13), dkms
+Standards-Version: 4.5.0
+Rules-Requires-Root: no
+Homepage: https://github.com/BGO-OD/cros3
+Vcs-Browser: https://github.com/BGO-OD/cros3
+Vcs-Git: https://github.com/BGO-OD/cros3.git
+
+Package: cros3-dkms
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: linux-headers-amd64 | linux-headers-686-pae | linux-headers-686 | linux-headers
+Provides: cros3
+Description: kernel module for cros3
+ This package provides the source code for the cros3 kernel
+ modules to be build with dkms.
+ .
+ Kernel source or headers are required to compile these modules.
+.
