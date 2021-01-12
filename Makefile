@@ -36,9 +36,9 @@ kmod_build:: $(cros3-cfiles) $(cros3-hdrs)
 %.h:
 	@ln -s ../$@
 
-distclean:: clean
+distclean: clean
 
-clean::
+clean:
 	rm -f  Module.symvers *.o *.ko
 	rm -rf .tmp_versions
 
