@@ -3,12 +3,13 @@
 export TOP_DIR=${GITHUB_WORKSPACE}
 export CCACHE_DIR=${TOP_DIR}/.ccache
 export WORKING_DIR=${TOP_DIR}/debian/output
+export SRC_DIR_NAME=source_dir
 
 mkdir -p ${WORKING_DIR}
-cp -ra ${TOP_DIR}/source_dir ${WORKING_DIR}
+cp -ra ${TOP_DIR}/${SRC_DIR_NAME} ${WORKING_DIR}
 
 # Enter source package dir
-cd ${WORKING_DIR}/source_dir
+cd ${WORKING_DIR}/${SRC_DIR_NAME}
 
 # Add deb-src entries
 sed -n '/^deb\s/s//deb-src /p' /etc/apt/sources.list > /etc/apt/sources.list.d/deb-src.list
@@ -49,7 +50,7 @@ find
 
 # Restore PWD to ${WORKING_DIR}
 cd ${WORKING_DIR}
-rm -rf ${WORKING_DIR}/${SOURCE_DIR}
+rm -rf ${WORKING_DIR}/${SRC_DIR_NAME}
 
 # Revert ownership for CCACHE_DIR
 chown -R $(id -nu). ${CCACHE_DIR}
