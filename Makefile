@@ -25,6 +25,8 @@ PWD             = $(shell pwd)
 
 cros3-cfiles    = ${cros3-c-objs:.o=.c}
 
+.PHONY: modules modules_install clean distclean debug
+
 default:: kmod_build
 
 kmod_build:: $(cros3-cfiles) $(cros3-hdrs)
