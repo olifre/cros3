@@ -28,9 +28,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: .ccache
-          key: ${{ runner.os }}-${{ RELEASE }}-ccache-${{ steps.get-time.outputs.datetime }}
+          key: ${{ runner.os }}-${{ env.RELEASE }}-ccache-${{ steps.get-time.outputs.datetime }}
           restore-keys: |
-            ${{ runner.os }}-${{ RELEASE }}-ccache-
+            ${{ runner.os }}-${{ env.RELEASE }}-ccache-
 
       - name: Build Package
         uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/gbp:latest
@@ -41,7 +41,7 @@ jobs:
       - name: Upload Package
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ runner.os }}-${{ RELEASE }}-debpkg
+          name: ${{ runner.os }}-${{ env.RELEASE }}-debpkg
           path: debian/output/*
           retention-days: 2
 
