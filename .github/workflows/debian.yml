@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Test
         uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/gbp:latest
-        run: |
-          echo "Hi."
-          ls -la /
-          pwd
-          ls -la
+        with:
+          entrypoint: /bin/sh
+          args: "-c \"echo Hi; ls -la\""
