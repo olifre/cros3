@@ -19,4 +19,4 @@ Description: kernel module for cros3
  modules to be build with dkms.
  .
  Kernel source or headers are required to compile these modules.
-.
+ .
