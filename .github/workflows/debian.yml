@@ -5,6 +5,10 @@ on:
     branches:
       # - master
 
+env:
+  RELEASE: unstable
+  PROJECT_NAME: cros3
+
 jobs:
   run-gbp:
     runs-on: ubuntu-20.04
@@ -24,9 +28,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: .ccache
-          key: ${{ runner.os }}-ccache-${{ steps.get-time.outputs.datetime }}
+          key: ${{ runner.os }}-${RELEASE}-ccache-${{ steps.get-time.outputs.datetime }}
           restore-keys: |
-            ${{ runner.os }}-ccache-
+            ${{ runner.os }}-${RELEASE}-ccache-
 
       - name: Build Package
         uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/gbp:latest
@@ -37,6 +41,23 @@ jobs:
       - name: Upload Package
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ runner.os }}-pkg
+          name: ${{ runner.os }}-${RELEASE}-debpkg
           path: debian/output/*
           retention-days: 2
+
+
+  deploy-with-aptly:
+    needs: [ run-gbp ]
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Download all Debian packaging workflow run artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: "*-debpkg"
+
+      - name: Prepare aptly repo
+        uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/aptly
+        with:
+          entrypoint: /bin/bash
+          args: source_dir/.scripts/prepaptly.sh
