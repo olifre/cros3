@@ -1,5 +1,5 @@
-gentoo (0.9.12-1) UNRELEASED; urgency=low
+cros3 (0.1.0-1) UNRELEASED; urgency=low
 
   * Initial release.
 
- -- Oliver Freyermuth <freyermuth@physik.uni-bonn.de> Mon, 11 Jan 2021 00:00:00 +0100
+ -- Oliver Freyermuth <freyermuth@physik.uni-bonn.de>  Mon, 11 Jan 2021 00:00:00 +0100
