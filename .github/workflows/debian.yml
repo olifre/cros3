@@ -32,6 +32,6 @@ jobs:
         uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/gbp:latest
         with:
           entrypoint: /bin/sh
-          args: .scripts/buildpkg.sh
+          args: source_dir/.scripts/buildpkg.sh
         env:
           CCACHE_DIR: .ccache
