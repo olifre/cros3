@@ -22,8 +22,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: .ccache
-          key: ${{ runner.os }}
-          #-${{ steps.get-time.outputs.datetime }}
+          key: ${{ runner.os }}-ccache-${{ steps.get-time.outputs.datetime }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-
 
       - name: Build Package
         uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/gbp:latest
