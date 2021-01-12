@@ -1,4 +1,4 @@
-#!/usr/bin/make -f
+#!/usr/bin/make -f -B
 export DH_VERBOSE=1
 
 include /usr/share/dpkg/pkg-info.mk
