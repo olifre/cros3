@@ -1,5 +1,5 @@
 # $Id: Makefile,v 1.5 2008/05/24 04:17:21 hannappe Exp $
-GCC_VER_MAJ      = $(shell $(CC) --version | head -n 1 | sed -e 's/[^0-9. ]//g;s/^ *//;s/^\(.\)\..*$$/\1/')
+#GCC_VER_MAJ      = $(shell $(CC) --version | head -n 1 | sed -e 's/[^0-9. ]//g;s/^ *//;s/^\(.\)\..*$$/\1/')
 
 LIBIP_PREFIX	?= ..
 
@@ -36,10 +36,10 @@ kmod_build:: $(cros3-cfiles) $(cros3-hdrs)
 %.h:
 	@ln -s ../$@
 
-%.GCC$(GCC_VER_MAJ):
-	@ln -s $(LIBIP_PREFIX)/$@
+#%.GCC$(GCC_VER_MAJ):
+#	@ln -s $(LIBIP_PREFIX)/$@
 
-# distclean:: clean
+distclean:: clean
 
 clean::
 	rm -f  Module.symvers *.o *.ko *.GCC* .??*
