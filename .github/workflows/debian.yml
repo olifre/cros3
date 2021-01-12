@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Get Time
         id: get-time
         run: |
@@ -25,6 +28,6 @@ jobs:
         uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/gbp:latest
         with:
           entrypoint: /bin/sh
-          args: "-c \"echo Hi; ls -la\""
+          args: .scripts/buildpkg.sh
         env:
           CCACHE_DIR: .ccache
