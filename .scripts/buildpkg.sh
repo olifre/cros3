@@ -44,6 +44,9 @@ BUILD_LOGFILE="${WORKING_DIR}/${BUILD_LOGFILE_SOURCE}_${BUILD_LOGFILE_VERSION}_$
 set -e
 su buildci -c "eatmydata dpkg-buildpackage ${DB_BUILD_PARAM}" |& OUTPUT_FILENAME=${BUILD_LOGFILE} filter-output
 
+ls -la
+find
+
 # Restore PWD to ${WORKING_DIR}
 cd ${WORKING_DIR}
 rm -rf ${WORKING_DIR}/${SOURCE_DIR}
