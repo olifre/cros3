@@ -10,8 +10,21 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - name: Get Time
+        id: get-time
+        run: |
+          echo "::set-output name=datetime::$(/bin/date --iso-8601=seconds)"
+        shell: bash
+
+      - uses: actions/cache@v2
+        with:
+          path: .ccache
+          key: ${{ runner.os }}-${{ steps.get-time.outputs.datetime }}
+
       - name: Test
         uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/gbp:latest
         with:
           entrypoint: /bin/sh
           args: "-c \"echo Hi; ls -la\""
+          env:
+            - CCACHE_DIR: .ccache
