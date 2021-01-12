@@ -1,0 +1,18 @@
+name: Run GBP
+
+on:
+  push:
+    branches:
+      # - master
+
+jobs:
+  run-gbp:
+    runs-on: ubuntu-20.04
+
+    - name: Test
+      uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/gbp:latest
+      run: |
+        echo "Hi."
+        ls -la /
+        pwd
+        ls -la
