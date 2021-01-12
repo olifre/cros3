@@ -27,4 +27,4 @@ jobs:
           entrypoint: /bin/sh
           args: "-c \"echo Hi; ls -la\""
           env:
-            - CCACHE_DIR: .ccache
+            CCACHE_DIR: .ccache
