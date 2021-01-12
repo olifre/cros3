@@ -37,6 +37,6 @@ jobs:
       - name: Upload Package
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ runner.os }}-DEB
-          path: debian/output/*.deb
+          name: ${{ runner.os }}-pkg
+          path: debian/output/*
           retention-days: 2
