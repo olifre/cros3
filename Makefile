@@ -36,14 +36,10 @@ kmod_build:: $(cros3-cfiles) $(cros3-hdrs)
 %.h:
 	@ln -s ../$@
 
-#%.GCC$(GCC_VER_MAJ):
-#	@ln -s $(LIBIP_PREFIX)/$@
-
 distclean:: clean
 
 clean::
 	rm -f  Module.symvers *.o *.ko
-	# *.GCC* .??*
 	rm -rf .tmp_versions
 
 dist:
