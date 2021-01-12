@@ -5,9 +5,10 @@ export CCACHE_DIR=${TOP_DIR}/.ccache
 export WORKING_DIR=${TOP_DIR}/debian/output
 
 mkdir -p ${WORKING_DIR}
+cp -ra ${TOP_DIR}/source_dir ${WORKING_DIR}
 
 # Enter source package dir
-cd ${TOP_DIR}/source_dir
+cd ${WORKING_DIR}/source_dir
 
 # Add deb-src entries
 sed -n '/^deb\s/s//deb-src /p' /etc/apt/sources.list > /etc/apt/sources.list.d/deb-src.list
