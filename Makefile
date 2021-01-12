@@ -25,7 +25,7 @@ PWD             = $(shell pwd)
 
 cros3-cfiles    = ${cros3-c-objs:.o=.c}
 
-# default:: kmod_build
+default:: kmod_build
 
 kmod_build:: $(cros3-cfiles) $(cros3-hdrs)
 	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
@@ -36,11 +36,13 @@ kmod_build:: $(cros3-cfiles) $(cros3-hdrs)
 %.h:
 	@ln -s ../$@
 
-distclean: clean
-
 clean:
-	rm -f  Module.symvers *.o *.ko
-	rm -rf .tmp_versions
+	rm -f *.o *.mod.c Module.symvers Module.markers modules.order \.*.o.cmd \.*.ko.cmd \.*.o.d
+	rm -rf \.tmp_versions
+
+distclean: mrproper
+mrproper:    clean
+	rm -f *.ko
 
 dist:
 	mkdir -p $(DISTDIR)
