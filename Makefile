@@ -42,6 +42,4 @@ dist:
 	ln cros3.c $(cros3-cfiles) $(cros3-hdrs) $(DISTDIR)
 	ln Makefile 99-cros3.rules $(DISTDIR)
 
-endif
-
 # ### EOF ###
