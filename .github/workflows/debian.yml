@@ -54,12 +54,10 @@ jobs:
 
       - name: Install package
         run: |
-          find
           mkdir -p pkgs
           mv *-debpkg/*.deb pkgs/
-          find
           apt -y update
-          apt -y install pkgs/*
+          apt -y install ./pkgs/*
 
   create-aptly-repo:
     needs: [ build-package ]
