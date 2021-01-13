@@ -1,9 +1,7 @@
 name: Run GBP
 
 on:
-  push:
-    branches:
-      # - master
+  push
 
 env:
   RELEASE: unstable
@@ -46,7 +44,7 @@ jobs:
           retention-days: 2
 
 
-  deploy-with-aptly:
+  create-aptly-repo:
     needs: [ run-gbp ]
     runs-on: ubuntu-20.04
 
@@ -71,3 +69,25 @@ jobs:
           name: ${{ runner.os }}-${{ env.RELEASE }}-repo
           path: debrepo.tar.gz
           retention-days: 2
+
+  deploy-aptly-repo:
+    needs: [ create-aptly-repo ]
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Download all Debian packaging workflow run artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Filter out repo data
+        run: |
+          mkdir -p publish/apt
+          for TAR in *-repo/*.tar.*; do tar xf $TAR -C publish/apt/; done
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        #if: endsWith(github.event.ref, '/master')
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./publish
+          force_orphan: true
