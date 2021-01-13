@@ -64,3 +64,10 @@ jobs:
         with:
           entrypoint: /bin/bash
           args: source_dir/.scripts/prepaptly.sh
+
+      - name: Upload Repo
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ runner.os }}-${{ env.RELEASE }}-repo
+          path: ${{ env.HOME }}/.aptly/public
+          retention-days: 2

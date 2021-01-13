@@ -18,4 +18,4 @@ aptly publish repo \
 		${ARCHITECTURES:+ -architectures=${ARCHITECTURES}} \
 		${PROJECT_NAME}
 
-find .aptly
+find ~/.aptly
