@@ -22,4 +22,4 @@ aptly publish repo \
 
 find ~/.aptly
 
-tar czf debrepo.tar.gz -C ~/.aptly/public *
+tar czf debrepo.tar.gz -C ~/.aptly/public .
