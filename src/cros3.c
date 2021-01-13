@@ -283,7 +283,8 @@ cros3_check_board(struct cros3_device *device)
 static int __init cros3_init_module (void)
 {
 	dev_t devreg = 0;
-	printk(KERN_INFO "cros3: driver startup, compiled " __DATE__ " " __TIME__ "\n");
+	printk(KERN_INFO "cros3: driver startup\n");
+	//printk(KERN_INFO "cros3: driver startup, compiled " __DATE__ " " __TIME__ "\n");
 	printk(KERN_INFO "cros3: $Id: cros3.c,v 1.21 2008/05/24 03:30:03 hannappe Exp $\n");
 	printk(KERN_INFO "cros3: " CROS3_HEADER_ID "\n");
 
