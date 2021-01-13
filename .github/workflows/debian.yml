@@ -56,7 +56,8 @@ jobs:
         run: |
           mkdir -p pkgs
           mv *-debpkg/*.deb pkgs/
-          sudo apt install pkgs/*
+          apt -y update
+          apt -y install pkgs/*
 
   create-aptly-repo:
     needs: [ build-package ]
