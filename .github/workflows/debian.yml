@@ -8,7 +8,7 @@ env:
   PROJECT_NAME: cros3
 
 jobs:
-  run-gbp:
+  build-package:
     runs-on: ubuntu-20.04
 
     steps:
@@ -43,9 +43,22 @@ jobs:
           path: debian/output/*
           retention-days: 2
 
+  test-dkms:
+    needs: [ build-package ]
+    runs-on: ubuntu-20.04
+    container: debian:10
+
+    - name: Download all Debian packaging workflow run artifacts
+      uses: actions/download-artifact@v2
+
+    - name: Install package
+      run: |
+        mkdir -p pkgs
+        mv *-debpkg/*.deb pkgs/
+        sudo apt install pkgs/*
 
   create-aptly-repo:
-    needs: [ run-gbp ]
+    needs: [ build-package ]
     runs-on: ubuntu-20.04
 
     steps:
