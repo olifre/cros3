@@ -61,7 +61,11 @@ jobs:
           set +e
           apt -y install ./pkgs/* || ERRCODE=$?
           set -e
+          set -x
+          find /var/lib/dkms/ -iname "make.log"
+          find /var/lib/dkms/
           find /var/lib/dkms/ -iname "make.log" -exec grep -H {} \;
+          set +x
           exit ${ERRCODE}
 
   create-aptly-repo:
