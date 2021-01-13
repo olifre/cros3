@@ -69,5 +69,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ runner.os }}-${{ env.RELEASE }}-repo
-          path: "~/.aptly/public/*"
+          path: debrepo.tar.gz
           retention-days: 2

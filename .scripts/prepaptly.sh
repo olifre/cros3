@@ -21,3 +21,5 @@ aptly publish repo \
 		${PROJECT_NAME}
 
 find ~/.aptly
+
+tar czf debrepo.tar.gz -C ~/.aptly/public *
