@@ -11,7 +11,7 @@ aptly repo show -with-packages ${PROJECT_NAME}
 
 ARCHITECTURES=$(aptly repo show -with-packages ${PROJECT_NAME} | \
 		awk 'BEGIN {FS="_"} /^Packages:/ {x=NR} (x && NR>x) {print $3}' | \
-		sort -u | tr '\n' ','); \
+		egrep -v '^$' | sort -u | tr '\n' ','); \
 
 echo $ARCHITECTURES
 
