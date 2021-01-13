@@ -58,9 +58,7 @@ jobs:
           mv *-debpkg/*.deb pkgs/
           apt -y update
           ERRCODE=0
-          #set +e
           apt -y install ./pkgs/* || ERRCODE=$?
-          #set -e
           find /var/lib/dkms/ -iname "make.log" -exec grep -H . {} \;
           exit ${ERRCODE}
 
