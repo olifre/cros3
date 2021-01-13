@@ -57,8 +57,10 @@ jobs:
           mkdir -p pkgs
           mv *-debpkg/*.deb pkgs/
           apt -y update
-          apt -y install ./pkgs/*
+          ERRCODE=0
+          apt -y install ./pkgs/* || ERRCODE=$?
           find /var/lib/dkms/ -iname "make.log" -exec grep -H {} \;
+          exit ${ERRCODE}
 
   create-aptly-repo:
     needs: [ build-package ]
