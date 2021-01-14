@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 mkdir build
 cp -ra spurce_dir/src/* build/
