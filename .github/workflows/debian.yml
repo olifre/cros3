@@ -49,7 +49,7 @@ jobs:
 
     strategy:
       matrix:
-        container: [ "debian:10", "debian:11" ]
+        container: [ "docker://debian:10", "docker://debian:11" ]
 
     steps:
       - name: Checkout repository
@@ -61,7 +61,7 @@ jobs:
         uses: actions/download-artifact@v2
 
       - name: Install package and compile on ${{ matrix.container }}
-        uses: docker://${{ matrix.container }}
+        uses: ${{ matrix.container }}
         with:
           entrypoint: /bin/bash
           args: source_dir/.scripts/testdkms.sh
