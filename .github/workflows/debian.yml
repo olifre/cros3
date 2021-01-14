@@ -46,21 +46,25 @@ jobs:
   test-dkms:
     needs: [ build-package ]
     runs-on: ubuntu-20.04
-    container: debian:10
+
+    strategy:
+      matrix:
+        container: [ debian:10, debian:11 ]
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: source_dir
+
       - name: Download all Debian packaging workflow run artifacts
         uses: actions/download-artifact@v2
 
-      - name: Install package and compile
-        run: |
-          mkdir -p pkgs
-          mv *-debpkg/*.deb pkgs/
-          apt -y update
-          ERRCODE=0
-          apt -y install ./pkgs/* || ERRCODE=$?
-          find /var/lib/dkms/ -iname "make.log" -exec grep -H . {} \;
-          exit ${ERRCODE}
+      - name: Install package and compile on ${{ matrix.container }}
+        uses: docker://${{ matrix.container }}
+        with:
+          entrypoint: /bin/bash
+          args: source_dir/.scripts/testdkms.sh
 
   create-aptly-repo:
     needs: [ build-package ]
