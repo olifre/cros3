@@ -49,7 +49,7 @@ jobs:
 
     strategy:
       matrix:
-        container: [ debian:10, debian:11 ]
+        container: [ "debian:10", "debian:11" ]
 
     steps:
       - name: Checkout repository
