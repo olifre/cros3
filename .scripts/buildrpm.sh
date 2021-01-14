@@ -1,7 +1,7 @@
 #!/bin/bash -x
 
 mkdir build
-cp -ra spurce_dir/src/* build/
+cp -ra source_dir/src/* build/
 cp *.spec build/
 cd build
 
@@ -9,7 +9,7 @@ yum install -y gcc rpm-build rpm-devel rpmlint make python bash coreutils diffut
 yum-builddep -y cros3.spec
 
 rpmdev-setuptree
-rpmbuild -ba hello-world.spec
+rpmbuild -ba cros3.spec
 
 cd ..
 find
