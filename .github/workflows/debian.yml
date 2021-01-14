@@ -49,7 +49,11 @@ jobs:
 
     strategy:
       matrix:
-        container: [ "debian:10", "debian:bullseye" ]
+        container: 
+          - "debian:10"
+          - "debian:bullseye"
+          - "debian:unstable"
+          - "debian:testing"
 
     container:
       image: ${{ matrix.container }}
