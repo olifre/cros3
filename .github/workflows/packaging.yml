@@ -1,4 +1,4 @@
-name: Run GBP
+name: Packaging
 
 on:
   push
@@ -95,6 +95,26 @@ jobs:
           name: ${{ runner.os }}-${{ env.RELEASE }}-repo
           path: debrepo.tar.gz
           retention-days: 2
+
+  build-rpm:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        container: 
+          - "centos:7"
+          - "centos:8"
+
+    container:
+      image: ${{ matrix.container }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: source_dir
+
+      - name: Build RPM on ${{ matrix.container }}
+        run: ./source_dir/.scripts/buildrpm.sh
 
   deploy-aptly-repo:
     needs: [ create-aptly-repo ]
