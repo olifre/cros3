@@ -162,7 +162,8 @@ union cros3_register_image {
 struct cros3_interrupt_data_type {
   unsigned long csr_sts;   /* value of status register at interrupt time */
   unsigned long irq_number;	/* absolute number of irq since open() */
-  struct timespec ts_irq;         /* time of last irqs */
+  // struct timespec ts_irq;         /* time of last irqs */
+  ktime_t ts_irq;         /* time of last irqs */
 };
 
 struct cros3_read_data_type {

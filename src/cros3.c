@@ -228,7 +228,8 @@ cros3_interrupt(int irq, void *dev_id, struct pt_regs *regs)
     /* now clear the interrupt line */
       writel(0,device->registers + CROS3_CSB_ACT_INR); /* any write clears! */
 	/*writel(0x00000808,device->registers + CROS3_CSB_CSR_CFG);*/
-	getnstimeofday(&(device->irqdata[device->write_index].ts_irq));
+	//getnstimeofday(&(device->irqdata[device->write_index].ts_irq));
+	device->irqdata[device->write_index].ts_irq = ktime_get_real();
 	device->irqdata[device->write_index].csr_sts = fifo_status;
 	device->irqdata[device->write_index].irq_number = ++(device->total_irqs);
 	device->write_index = ((device->write_index + 1) & (CROS3_MAX_IRQTIMES-1));
