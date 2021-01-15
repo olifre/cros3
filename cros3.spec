@@ -14,7 +14,7 @@ Source0:		%{name}-%{version}.tar.bz2
 BuildRoot:		%{_tmppath}/%{name}-%{version}-build
 BuildRequires:	udev
 
-%suse_kernel_module_package -p %_sourcedir/preamble
+# %suse_kernel_module_package -p %_sourcedir/preamble
 
 %description
 Kernel driver for the cros3 module
