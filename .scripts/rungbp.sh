@@ -1,4 +1,6 @@
-#!/bin/bash -x
+#!/bin/bash
+
+set -x
 
 export TOP_DIR=${GITHUB_WORKSPACE}
 export CCACHE_DIR=${TOP_DIR}/.ccache
@@ -10,6 +12,7 @@ mkdir -p ${WORKING_DIR}
 pushd ${SRC_DIR_NAME} >/dev/null
 
 gbp pull --ignore-branch --pristine-tar --track-missing
+find ${TOP_DIR}
 
 # Check if we can obtain the orig from the git branches
 if ! gbp export-orig --tarball-dir=${WORKING_DIR}; then
@@ -19,6 +22,7 @@ if ! gbp export-orig --tarball-dir=${WORKING_DIR}; then
   cp ../*orig.tar* ${WORKING_DIR}
   GBP_BUILDPACKAGE_ARGS="--git-overlay ${GBP_BUILDPACKAGE_ARGS}"
 fi
+find ${TOP_DIR}
 
 # As of 2020-09-09, gbp doesn't have a simpler method to extract the
 # debianized source package. Use --git-pbuilder=`/bin/true` for the moment:
@@ -34,6 +38,7 @@ gbp buildpackage \
      --git-no-hooks \
      --git-no-purge \
      ${GBP_BUILDPACKAGE_ARGS} |& filter-output
+find ${TOP_DIR}
 
 cd ${WORKING_DIR}
 DEBIANIZED_SOURCE=$(find . -maxdepth 3 -wholename "*/debian/changelog" |\
