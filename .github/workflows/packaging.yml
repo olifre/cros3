@@ -56,7 +56,7 @@ jobs:
     strategy:
       matrix:
         container: 
-          - "debian:10"
+          - "debian:stable"
           - "debian:bullseye"
           - "debian:unstable"
           - "debian:testing"
