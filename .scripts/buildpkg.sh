@@ -16,7 +16,7 @@ cp -ra ${TOP_DIR}/${SRC_DIR_NAME} ${WORKING_DIR}
 cd ${WORKING_DIR}/${SRC_DIR_NAME}
 
 # Build orig-tar.
-git archive HEAD | bzip2 > ../cros3_0.1.0-orig.tar.bz2
+git archive HEAD | bzip2 > ../cros3_0.1.0.orig.tar.bz2
 
 # Add deb-src entries
 sed -n '/^deb\s/s//deb-src /p' /etc/apt/sources.list > /etc/apt/sources.list.d/deb-src.list
