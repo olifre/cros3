@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 export TOP_DIR=${GITHUB_WORKSPACE}
 export CCACHE_DIR=${TOP_DIR}/.ccache
 export WORKING_DIR=${TOP_DIR}/debian/output
