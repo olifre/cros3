@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -x
+set -e
 
 export TOP_DIR=${GITHUB_WORKSPACE}
 export CCACHE_DIR=${TOP_DIR}/.ccache
@@ -12,6 +13,9 @@ cp -ra ${TOP_DIR}/${SRC_DIR_NAME} ${WORKING_DIR}
 
 # Enter source package dir
 cd ${WORKING_DIR}/${SRC_DIR_NAME}
+
+# Build orig-tar.
+git archive | bzip2 > ../cros3-0.1.0-orig.tar.bz2
 
 # Add deb-src entries
 sed -n '/^deb\s/s//deb-src /p' /etc/apt/sources.list > /etc/apt/sources.list.d/deb-src.list
