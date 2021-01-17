@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 export TOP_DIR=${GITHUB_WORKSPACE}
 export CCACHE_DIR=${TOP_DIR}/.ccache
@@ -6,6 +6,8 @@ export WORKING_DIR=${TOP_DIR}/debian/output
 export SRC_DIR_NAME=source_dir
 
 mkdir -p ${WORKING_DIR}
+
+pushd ${SRC_DIR_NAME} >/dev/null
 
 gbp pull --ignore-branch --pristine-tar --track-missing
 
@@ -42,6 +44,7 @@ if [ ! "${DEBIANIZED_SOURCE}" ] ; then
 fi
 
 #mv ${DEBIANIZED_SOURCE} ${SOURCE_DIR}
+popd >/dev/null
 
 ls -la
 find
