@@ -49,7 +49,8 @@ BUILD_LOGFILE_ARCH=$(dpkg --print-architecture)
 BUILD_LOGFILE="${WORKING_DIR}/${BUILD_LOGFILE_SOURCE}_${BUILD_LOGFILE_VERSION}_${BUILD_LOGFILE_ARCH}.build"
 
 # Build package as user buildci
-set -e
+ls -la
+ls -la ..
 su buildci -c "eatmydata dpkg-buildpackage ${DB_BUILD_PARAM}" |& OUTPUT_FILENAME=${BUILD_LOGFILE} filter-output
 
 ls -la
