@@ -1,3 +1,7 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: cros3
+Source: https://github.com/BGO-OD/cros3
+
 Files: *
 Copyright: 2008-2020 The BGOOD Collaboration
 License: GPL-2
