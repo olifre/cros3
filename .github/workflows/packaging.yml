@@ -49,6 +49,20 @@ jobs:
           path: debian/output/*
           retention-days: 2
 
+  run-lintian:
+    needs: [ build-package ]
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Download all Debian packaging workflow run artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Run Lintian on ${{ RELEASE }}
+        uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/lintian:${{ RELEASE }}
+        with:
+          entrypoint: /bin/bash
+          args: source_dir/.scripts/runlintian.sh
+
   test-dkms:
     needs: [ build-package ]
     runs-on: ubuntu-20.04
