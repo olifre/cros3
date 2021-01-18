@@ -157,8 +157,8 @@ jobs:
       - name: Build RPM on ${{ matrix.container }}
         run: ./source_dir/.scripts/buildrpm.sh
 
-  deploy-aptly-repo:
-    needs: [ create-aptly-repo ]
+  deploy-repos-and-data:
+    needs: [ run-lintian, create-aptly-repo ]
     runs-on: ubuntu-20.04
 
     steps:
@@ -169,6 +169,17 @@ jobs:
         run: |
           mkdir -p publish/apt
           for TAR in *-repo/*.tar.*; do tar xf $TAR -C publish/apt/; done
+
+      - name: Filter out Lintian HTML
+        run: |
+          mkdir -p publish/lintian
+          echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' > publish/lintian/index.html
+          echo '<html><body>' >> publish/lintian/index.html
+          for LINTIAN_HTML in *-lintian/*.html; do
+            mv ${LINTIAN_HTML} publish/lintian/;
+            echo "<a href=\"${LINTIAN_HTML}\">${LINTIAN_HTML}</a>br />" >> publish/lintian/index.html
+          done
+          echo '</body></html>' >> publish/lintian/index.html
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
