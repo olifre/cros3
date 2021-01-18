@@ -58,7 +58,7 @@ jobs:
         uses: actions/download-artifact@v2
 
       - name: Run Lintian on ${{ env.RELEASE }}
-        uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/lintian:${{ env.RELEASE }}
+        uses: docker://registry.salsa.debian.org/salsa-ci-team/pipeline/lintian:testing
         with:
           entrypoint: /bin/bash
           args: source_dir/.scripts/runlintian.sh
