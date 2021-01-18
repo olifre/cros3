@@ -1,0 +1,24 @@
+Package: cros3-dkms
+Priority: optional
+Section: kernel
+Installed-Size: 32
+Maintainer: Oliver Freyermuth <freyermuth@physik.uni-bonn.de>
+Architecture: all
+Source: cros3
+Version: 0.1.0-1
+Provides: cros3
+Depends: dkms (>= 2.1.0.0)
+Recommends: linux-headers-amd64 | linux-headers-686-pae | linux-headers-686 | linux-headers
+Filename: pool/main/c/cros3/cros3-dkms_0.1.0-1_all.deb
+Size: 7628
+MD5sum: 15342c8a63407de8f9770696677c917d
+SHA1: a0d22921792e2eb77a20a7264b2ea3bbccf6019a
+SHA256: 262e21199ccc0510e45c97750c9867ddb32ee2fc4fce751e125a00afce962f57
+SHA512: 1727c3ecce43e1f62d01a3f2e9b327ec8e55659bd0beb23b40e859f0eb2c5eaf233d39091e9950b3954fbbbdca615bb07eb2922d5c58d486dce6c2e207bcb970
+Description: kernel module for cros3
+ This package provides the source code for the cros3 kernel
+ modules to be build with dkms.
+ .
+ Kernel source or headers are required to compile these modules.
+Homepage: https://github.com/BGO-OD/cros3
+

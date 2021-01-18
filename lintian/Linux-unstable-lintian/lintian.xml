@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<testsuites disabled="0" errors="0" failures="2" tests="3" time="0.0">
+	<testsuite disabled="0" errors="0" failures="2" name="Lintian2Junit" skipped="0" tests="3" time="0">
+		<testcase name="cros3-dkms">
+			<failure type="failure" message="initial-upload-closes-no-bugs"/>
+		</testcase>
+		<testcase name="cros3 source">
+			<failure type="failure" message="no-debian-changes"/>
+		</testcase>
+		<testcase name="cros3 source"/>
+	</testsuite>
+</testsuites>
+
