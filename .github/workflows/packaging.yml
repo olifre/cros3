@@ -68,8 +68,16 @@ jobs:
           entrypoint: /bin/bash
           args: source_dir/.scripts/runlintian.sh
 
+      - name: Publish Lintian Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.7
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: lintian/*.xml
+
       - name: Upload Lintian results
         uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: ${{ runner.os }}-${{ env.RELEASE }}-lintian
           path: lintian
