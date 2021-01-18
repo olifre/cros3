@@ -34,7 +34,4 @@ lintian --suppress-tags "${CI_LINTIAN_SUPPRESS_TAGS}" \
                 --display-info --pedantic --allow-root --exp-output format=html \
                 ${WORKING_DIR}/*.changes > lintian/lintian.html || true
 
-ls -la
-find
-
 exit ${ECODE-0}
