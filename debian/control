@@ -3,7 +3,7 @@ Section: kernel
 Priority: optional
 Maintainer: Oliver Freyermuth <freyermuth@physik.uni-bonn.de>
 Build-Depends: debhelper-compat (= 13), dkms
-Standards-Version: 4.5.0
+Standards-Version: 4.5.1
 Rules-Requires-Root: no
 Homepage: https://github.com/BGO-OD/cros3
 Vcs-Browser: https://github.com/BGO-OD/cros3

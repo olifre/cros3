@@ -7,7 +7,7 @@ include /usr/share/dpkg/pkg-info.mk
 	dh $@ --with dkms
 
 override_dh_install:
-	dh_install src/* usr/src/cros3-$(DEB_VERSION)/
+	dh_install src/cros3.{c,h} src/Makefile usr/src/cros3-$(DEB_VERSION)/
 
 override_dh_dkms:
 	dh_dkms -V $(DEB_VERSION)
