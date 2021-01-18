@@ -175,9 +175,10 @@ jobs:
           mkdir -p publish/lintian
           echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' > publish/lintian/index.html
           echo '<html><body>' >> publish/lintian/index.html
-          for LINTIAN_HTML in *-lintian/*.html; do
-            mv ${LINTIAN_HTML} publish/lintian/;
-            echo "<a href=\"${LINTIAN_HTML}\">${LINTIAN_HTML}</a>br />" >> publish/lintian/index.html
+          for LINTIAN_DIR in *-lintian; do
+            mv ${LINTIAN_DIR} publish/lintian/;
+            LINTIAN_HTML=$(ls -1 ${LINTIAN_DIR}/*.html)
+            echo "<a href=\"${LINTIAN_HTML}\">${LINTIAN_HTML}</a><br />" >> publish/lintian/index.html
           done
           echo '</body></html>' >> publish/lintian/index.html
 
