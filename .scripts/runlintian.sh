@@ -4,20 +4,27 @@ set -x
 set -e
 set -o pipefail
 
+export WORKING_DIR=Linux-${RELEASE}-debpkg
+
 lintian --version
 
-export TOP_DIR=${GITHUB_WORKSPACE}
-export CCACHE_DIR=${TOP_DIR}/.ccache
-export WORKING_DIR=${TOP_DIR}/debian/output
-export SRC_DIR_NAME=source_dir
+if lintian --fail-on error --allow-root > /dev/null ; then
+  if echo "${CI_LINTIAN_FAIL_WARNING}" | grep -qE '^(1|yes|true)$'; then
+    CI_LINTIAN_FAIL_ARG='--fail-on error --fail-on warning'
+  else
+    CI_LINTIAN_FAIL_ARG='--fail-on error'
+  fi
+else
+  CI_LINTIAN_FAIL_ARG=''
+fi
 
-mkdir -p ${WORKING_DIR}
-cp -ra ${TOP_DIR}/${SRC_DIR_NAME} ${WORKING_DIR}
+lintian	--suppress-tags "${CI_LINTIAN_SUPPRESS_TAGS}" \
+	--display-info --pedantic ${CI_LINTIAN_FAIL_ARG} \
+	--allow-root ${WORKING_DIR}/*.changes | tee lintian.output || ECODE=$?
 
-# Enter source package dir
-cd ${WORKING_DIR}/${SRC_DIR_NAME}
+if echo "${CI_LINTIAN_FAIL_WARNING}" | grep -qE '^(1|yes|true)$'; then
+  grep -q '^W: ' lintian.output && ECODE=3
+fi
 
-
-cd ${TOP_DIR}
 ls -la
 find
