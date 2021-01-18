@@ -68,6 +68,13 @@ jobs:
           entrypoint: /bin/bash
           args: source_dir/.scripts/runlintian.sh
 
+      - name: Upload Lintian results
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ runner.os }}-${{ env.RELEASE }}-lintian
+          path: lintian
+          retention-days: 2
+
   test-dkms:
     needs: [ build-package ]
     runs-on: ubuntu-20.04
