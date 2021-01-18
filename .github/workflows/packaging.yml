@@ -54,6 +54,11 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: source_dir
+
       - name: Download all Debian packaging workflow run artifacts
         uses: actions/download-artifact@v2
 
