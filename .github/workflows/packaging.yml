@@ -178,7 +178,7 @@ jobs:
           for LINTIAN_DIR in *-lintian; do
             cp -ra ${LINTIAN_DIR} publish/lintian/;
             LINTIAN_HTML=$(ls -1 ${LINTIAN_DIR}/*.html)
-            echo "<a href=\"lintian/${LINTIAN_HTML}\">${LINTIAN_DIR}</a><br />" >> publish/lintian/index.html
+            echo "<a href=\"${LINTIAN_HTML}\">${LINTIAN_DIR}</a><br />" >> publish/lintian/index.html
           done
           echo '</body></html>' >> publish/lintian/index.html
 
