@@ -20,7 +20,7 @@ jobs:
       - name: Get Time
         id: get-time
         run: |
-          echo "::set-output name=datetime::$(/bin/date --iso-8601=seconds)"
+          echo "datetime=$(/bin/date --iso-8601=seconds)" >> $GITHUB_OUTPUT
         shell: bash
 
       - uses: actions/cache@v2
